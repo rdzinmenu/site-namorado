@@ -1,485 +1,219 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Feliz Dia dos Namorados</title>
+  <meta charset="UTF-8">
+  <title>Dia dos Namorados</title>
   <style>
-    /* Básico e fundo branco semi-transparente */
     body {
+      font-family: Arial, sans-serif;
+      background: #fff0f5;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fff0f6;
-      color: #4a0033;
       text-align: center;
-      overflow-x: hidden;
-      position: relative;
-    }
-    
-    /* Coração animado no topo */
-    .heartbeat {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 48px;
-      color: #e60073;
-      animation: heartbeat 1.5s infinite;
-      z-index: 1000;
-      user-select: none;
-    }
-    
-    @keyframes heartbeat {
-      0%, 100% { transform: translateX(-50%) scale(1); }
-      25% { transform: translateX(-50%) scale(1.2); }
-      50% { transform: translateX(-50%) scale(1); }
-      75% { transform: translateX(-50%) scale(1.2); }
-    }
-
-    /* Container principal */
-    .container {
-      max-width: 800px;
-      margin: 80px auto 40px;
-      padding: 30px 20px;
-      background-color: rgba(255, 255, 255, 0.85);
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(230, 0, 115, 0.3);
-      position: relative;
-      z-index: 1;
     }
 
     h1 {
-      font-size: 36px;
-      color: #b30059;
-      margin-bottom: 15px;
-    }
-
-    p {
-      font-size: 18px;
-      line-height: 1.6;
-      user-select: text;
-      margin-bottom: 25px;
-    }
-
-    img {
-      max-width: 100%;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      cursor: default;
-    }
-
-    /* audio sem controles, largura 100% e border radius */
-    audio {
-      margin-top: 20px;
-      width: 100%;
-      border-radius: 10px;
-      outline: none;
-      display: none; /* escondido pois vai tocar só no clique */
-    }
-
-    /* Galeria dos momentos */
-    .moment-gallery {
       margin-top: 40px;
+      font-size: 36px;
+      color: #c2185b;
+    }
+
+    .subtitulo {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #880e4f;
+    }
+
+    #botaoMusica {
+      background-color: #c2185b;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    #botaoMusica:hover {
+      background-color: #880e4f;
+    }
+
+    .galeria-titulo {
+      font-size: 24px;
+      color: #c2185b;
+      margin-top: 50px;
+    }
+
+    .galeria {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      margin-top: 30px;
       gap: 20px;
-      cursor: pointer;
-      user-select: none;
     }
 
-    .moment {
-      position: relative;
-      width: 250px;
-    }
-
-    .moment img {
-      width: 100%;
-      border-radius: 15px;
-      filter: blur(10px);
-      transition: filter 0.5s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    .moment .overlay-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 10px 14px;
+    .galeria img {
+      width: 200px;
+      height: auto;
       border-radius: 10px;
-      pointer-events: none;
-      user-select: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
     }
 
-    .moment-text {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #b30059;
+    .galeria img:hover {
+      transform: scale(1.05);
+    }
+
+    .lightbox {
       display: none;
-      text-align: center;
-      user-select: text;
+      position: fixed;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
     }
 
-    /* Interação de resposta dos botões */
-    .interaction {
-      margin-top: 40px;
-    }
-
-    .interaction h2 {
-      font-size: 24px;
-      color: #b30059;
+    .lightbox img {
+      max-width: 90%;
+      max-height: 60vh;
+      border-radius: 10px;
       margin-bottom: 20px;
     }
 
-    .interaction button {
-      padding: 12px 24px;
-      margin: 10px;
-      font-size: 18px;
-      background-color: #ff6699;
+    .lightbox p {
       color: white;
-      border: none;
-      border-radius: 10px;
+      font-size: 20px;
+      max-width: 80%;
+    }
+
+    .fechar {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      color: white;
       cursor: pointer;
-      transition: background-color 0.3s;
-      user-select: none;
     }
 
-    .interaction button:hover {
-      background-color: #cc3366;
-    }
-
-    .response {
+    .mensagem-final {
+      margin-top: 60px;
       font-size: 22px;
-      color: #4CAF50;
-      margin-top: 20px;
-      font-weight: bold;
-      min-height: 28px;
-      user-select: text;
-    }
-
-    /* Mensagem surpresa com efeito digitação */
-    .surpresa {
-      margin-top: 20px;
-      font-size: 20px;
-      color: #e60073;
-      min-height: 28px;
-      user-select: text;
-      font-style: italic;
-    }
-
-    /* Caixa de mensagem para ela */
-    .message-box {
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    .message-box textarea {
-      width: 100%;
-      max-width: 700px;
-      height: 80px;
-      border-radius: 12px;
-      border: 2px solid #b30059;
-      padding: 10px;
-      font-size: 16px;
-      resize: none;
-      outline: none;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    .message-box button {
-      margin-top: 10px;
-      background-color: #e60073;
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 18px;
-      transition: background-color 0.3s;
-    }
-
-    .message-box button:hover {
-      background-color: #b30059;
-    }
-
-    .message-response {
-      margin-top: 15px;
-      font-size: 18px;
-      color: #b30059;
-      font-style: italic;
-      min-height: 24px;
-      user-select: text;
-    }
-
-    /* Contador regressivo */
-    .countdown {
-      margin-top: 40px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #e60073;
-      user-select: none;
-    }
-
-    /* Perguntas românticas */
-    .romantic-quiz {
-      margin-top: 40px;
+      color: #880e4f;
       max-width: 700px;
       margin-left: auto;
       margin-right: auto;
-      user-select: none;
     }
 
-    .romantic-quiz h3 {
-      color: #b30059;
-      margin-bottom: 15px;
-    }
-
-    .romantic-quiz button {
-      background-color: #ff6699;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      margin: 6px 8px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-
-    .romantic-quiz button:hover {
-      background-color: #cc3366;
-    }
-
-    .quiz-response {
-      margin-top: 15px;
-      font-size: 18px;
-      font-style: italic;
-      color: #b30059;
-      min-height: 28px;
-      user-select: text;
-    }
-
-    /* Mensagem secreta desbloqueada */
-    .secret-message {
-      margin-top: 40px;
-      background-color: #ffccdd;
-      border: 2px solid #e60073;
-      padding: 15px 20px;
-      border-radius: 15px;
-      color: #b30059;
+    .titulo {
+      font-size: 24px;
       font-weight: bold;
-      display: none;
-      user-select: text;
+      color: #c2185b;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="heartbeat">❤️</div>
 
-  <div class="container">
-    <h1>Feliz Dia dos Namorados ❤️</h1>
-    <img src="imagem.jpg" alt="Foto do casal" />
-    <p>
-      Você é a prova de que o amor pode ser puro e verdadeiro. Você é gentil e sensível, por mais que não queira demonstrar. Teve que crescer rápido e aprender a lidar com tudo muito cedo...<br /><br />
-      Você é minha salvação e meu motivo de acordar todos os dias. Seu coração é GIGANTE e leve. Você é carinhosa, delicada, mas ao mesmo tempo muito forte.<br /><br />
-      Você é tudo que eu pedi a Deus. A melhor namorada do mundo. A melhor parte da minha vida.<br /><br />
-      Eu agradeço a Deus por ele me permitir te chamar de minha mulher! 💖
-    </p>
+  <h1>Feliz Dia dos Namorados, meu amor!</h1>
+  <div class="subtitulo">O amor é maior que o ódio!</div>
 
-    <audio id="backgroundMusic" autoplay loop muted>
-      <source src="musica.mp3" type="audio/mpeg" />
-      Seu navegador não suporta áudio HTML5.
-    </audio>
+  <!-- Botão de música -->
+  <button id="botaoMusica" onclick="tocarOuPausarMusica()">🎶 Tocar Música</button>
+  <audio id="musicaFundo" src="musica.mp3" loop></audio>
+<span style="font-size: 16px; color: #880e4f; font-style: italic;">"Respeita quem te come" – by Poty</span>
+  <div class="galeria-titulo">Clique aqui para lembrar 💖</div>
 
-    <!-- Galeria -->
-    <div class="moment-gallery" id="momentGallery">
-      <div class="moment" onclick="revealMoment(this)">
-        <img src="foto1.jpeg" alt="Momento 1" />
-        <div class="overlay-text">Clique pra lembrar ✨</div>
-        <div class="moment-text">Primeira vez da gente, e foi aqui que vi que você era diferente... Tua vibe, teu sorriso, tudo ali me ganhou sem esforço. 💘</div>
-      </div>
+  <div class="galeria">
+    <img src="WhatsApp Image 2025-06-12 at 12.41.34.jpeg" onclick="abrirLightbox(0)">
+    <img src="WhatsApp Image 2025-06-12 at 12.41.34 (1).jpeg" onclick="abrirLightbox(1)">
+    <img src="WhatsApp Image 2025-06-12 at 12.41.32.jpeg" onclick="abrirLightbox(2)">
+    <img src="WhatsApp Image 2025-06-12 at 12.41.33.jpeg" onclick="abrirLightbox(3)">
+    <img src="WhatsApp Image 2025-06-12 at 12.41.33 (2).jpeg" onclick="abrirLightbox(4)">
+    <img src="WhatsApp Image 2025-06-12 at 12.41.33 (1).jpeg" onclick="abrirLightbox(5)">
+  </div>
 
-      <div class="moment" onclick="revealMoment(this)">
-        <img src="foto2.jpeg" alt="Momento 2" />
-        <div class="overlay-text">Clique pra lembrar ✨</div>
-        <div class="moment-text">A gente não tinha nem muito tempo ainda e fazer parte do seu aniversário me fez sentir que era só o começo de muita coisa linda. 🎂✨</div>
-      </div>
+  <div id="lightbox" class="lightbox" onclick="fecharLightbox()">
+    <span class="fechar">&times;</span>
+    <img id="imgLightbox" src="">
+    <div class="titulo" id="tituloLightbox"></div>
+    <p id="textoLightbox"></p>
+  </div>
 
-      <div class="moment" onclick="revealMoment(this)">
-        <img src="foto3.jpeg" alt="Momento 3" />
-        <div class="overlay-text">Clique pra lembrar ✨</div>
-        <div class="moment-text">Acho que foi nossa primeira briga... mas mesmo no meio do caos, a gente seguiu junto. Porque amor de verdade bate de frente, mas não solta. 🎶🖤</div>
-      </div>
-
-      <div class="moment" onclick="revealMoment(this)">
-        <img src="foto4.jpeg" alt="Momento 4" />
-        <div class="overlay-text">Clique pra lembrar ✨</div>
-        <div class="moment-text">Nossa última saída... A noite foi simples, mas o sentimento era gigante. Eu te amo, gatinha. 💋</div>
-      </div>
-    </div>
-
-    <!-- Interação dos botões -->
-    <div class="interaction">
-      <h2>Quer passar mais um Dia dos Namorados comigo?</h2>
-      <button onclick="showResponse('Eu sabia que você ia dizer SIM! 💘')">Sim</button>
-      <button onclick="showResponse('CLARO que sim! Você é minha vida! 💞')">Claro</button>
-      <div class="response" id="responseText"></div>
-      <div class="surpresa" id="surpresaTexto"></div>
-    </div>
-
-    <!-- Caixa de mensagem dela -->
-    <div class="message-box">
-      <h3>Quer me deixar uma mensagem?</h3>
-      <textarea id="userMessage" placeholder="Escreve aqui, amor..."></textarea>
-      <button onclick="replyToMessage()">Enviar</button>
-      <div class="message-response" id="messageResponse"></div>
-    </div>
-
-    <!-- Perguntas românticas -->
-    <div class="romantic-quiz">
-      <h3>Responda pra mim:</h3>
-      <button onclick="quizAnswer('Você me ama?')">Você me ama?</button>
-      <button onclick="quizAnswer('Qual meu maior defeito?')">Qual meu maior defeito?</button>
-      <button onclick="quizAnswer('Quando você percebeu que me amava?')">Quando você percebeu que me amava?</button>
-      <div class="quiz-response" id="quizResponse"></div>
-    </div>
-
-    <!-- Contador regressivo pro próximo encontro -->
-    <div class="countdown" id="countdown"></div>
-
-    <!-- Mensagem secreta -->
-    <div class="secret-message" id="secretMessage">
-      🎉 Você desbloqueou uma mensagem secreta: <br />
-      Eu não troco você por nada nesse mundo. Obrigado por ser essa luz na minha vida! Te amo muito! 💖
-    </div>
+  <div class="mensagem-final">
+    “Feliz dia dos namorados, meu nego. Que nosso amor seja maior que qualquer coisa. Estar ao seu lado é uma dádiva. Eu te amo!”
   </div>
 
   <script>
-    const music = document.getElementById('backgroundMusic');
-    music.muted = true;
-    music.play();
-
-    function playMusicOnInteraction() {
-      if (music.paused) {
-        music.muted = false;
-        music.play();
+    const imagens = [
+      {
+        src: "WhatsApp Image 2025-06-12 at 12.41.34.jpeg",
+        titulo: "O começo de tudo",
+        texto: "Te conheci há anos, mas foi em um carnaval específico em que nossos corpos se encontravam pela primeira vez. Depois disso, nunca mais fui a mesma. Você é meu carnaval, amor."
+      },
+      {
+        src: "WhatsApp Image 2025-06-12 at 12.41.34 (1).jpeg",
+        titulo: "",
+        texto: "Cada toque seu é precioso, cada gesto, cada detalhe. Amo o jeito em que nossos corpos se conectam e nossa alma se conhece."
+      },
+      {
+        src: "WhatsApp Image 2025-06-12 at 12.41.32.jpeg",
+        titulo: "",
+        texto: "Sei que passamos por inúmeras coisas, sei da dor e sei que não é fácil, mas acredito que o amor seja maior que qualquer coisa. E eu acredito no nosso amor."
+      },
+      {
+        src: "WhatsApp Image 2025-06-12 at 12.41.33.jpeg",
+        titulo: "",
+        texto: "Ter você ao meu lado é uma das melhores coisas na minha vida, nego. Você me faz melhor. Você me faz mais eu!"
+      },
+      {
+        src: "WhatsApp Image 2025-06-12 at 12.41.33 (2).jpeg",
+        titulo: "",
+        texto: "Obrigada por me ouvir, por me aturar, por aturar minhas personalidades e meu jeito até mesmo quando faço palhaçada, isso é uma das coisas que eu mais amo em você!"
+      },
+      {
+        src: "WhatsApp Image 2025-06-12 at 12.41.33 (1).jpeg",
+        titulo: "",
+        texto: "Já falei que meu lugar favorito no mundo é no seu sovaco? Sério, se eu pudesse, moraria nele! kkkkkkkkk Enfim, saiba que eu amo estar com você, sua companhia me faz muito bem."
       }
-      window.removeEventListener('click', playMusicOnInteraction);
+    ];
+
+    function abrirLightbox(index) {
+      const img = imagens[index];
+      document.getElementById("imgLightbox").src = img.src;
+      document.getElementById("tituloLightbox").textContent = img.titulo;
+      document.getElementById("textoLightbox").textContent = img.texto;
+      document.getElementById("lightbox").style.display = "flex";
     }
 
-    window.addEventListener('click', playMusicOnInteraction);
+    function fecharLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
 
-    // Revela o texto do momento e tira o blur da imagem clicada
-    function revealMoment(momentDiv) {
-      const img = momentDiv.querySelector('img');
-      const text = momentDiv.querySelector('.moment-text');
-      if (img.style.filter === 'none') {
-        // Se já estiver revelado, volta a esconder
-        img.style.filter = 'blur(10px)';
-        text.style.display = 'none';
+    const audio = document.getElementById("musicaFundo");
+    const botao = document.getElementById("botaoMusica");
+    let tocando = false;
+
+    function tocarOuPausarMusica() {
+      if (!tocando) {
+        audio.play();
+        botao.innerText = "⏸️ Pausar Música";
+        tocando = true;
       } else {
-        // Revela só esse momento
-        const allMoments = document.querySelectorAll('.moment img');
-        allMoments.forEach(i => {
-          i.style.filter = 'blur(10px)';
-        });
-        const allTexts = document.querySelectorAll('.moment-text');
-        allTexts.forEach(t => (t.style.display = 'none'));
-
-        img.style.filter = 'none';
-        text.style.display = 'block';
+        audio.pause();
+        botao.innerText = "🎶 Tocar Música";
+        tocando = false;
       }
     }
-
-    // Mostra resposta e faz efeito surpresa depois
-    function showResponse(message) {
-      const response = document.getElementById('responseText');
-      const surprise = document.getElementById('surpresaTexto');
-      response.textContent = message;
-      surprise.textContent = '';
-
-      setTimeout(() => {
-        typeWriter(surprise, 'Eu te amo muito, minha vida! 🥰💕', 0);
-      }, 800);
-    }
-
-    // Efeito digitação
-    function typeWriter(element, text, i) {
-      if (i < text.length) {
-        element.textContent += text.charAt(i);
-        setTimeout(() => typeWriter(element, text, i + 1), 80);
-      }
-    }
-
-    // Responde a mensagem da textarea
-    function replyToMessage() {
-      const input = document.getElementById('userMessage');
-      const response = document.getElementById('messageResponse');
-      if (input.value.trim() === '') {
-        response.textContent = 'Por favor, escreve algo!';
-      } else {
-        response.textContent = `Que lindo! Eu li sua mensagem: "${input.value.trim()}" 💖`;
-        input.value = '';
-      }
-    }
-
-    // Perguntas românticas do quiz
-    function quizAnswer(question) {
-      const response = document.getElementById('quizResponse');
-      if (question === 'Você me ama?') {
-        response.textContent = 'Mais que macarrão e futebol juntos! 🚀💕';
-      } else if (question === 'Qual meu maior defeito?') {
-        response.textContent = 'Me deixar cada vez mais viciado em você. 😍';
-      } else if (question === 'Quando você percebeu que me amava?') {
-        response.textContent = 'No dia que você não me julgou por repetir o prato três vezes. 😄';
-      }
-    }
-
-    // Contador regressivo pro próximo encontro (exemplo: 14 de junho de 2025, 19h)
-    function countdownTimer() {
-      const countdown = document.getElementById('countdown');
-      const targetDate = new Date('2025-06-14T19:00:00');
-      const now = new Date();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        countdown.textContent = 'Estamos juntos agora! 💖';
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      countdown.textContent = `Próximo encontro em: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-
-    setInterval(countdownTimer, 1000);
-    countdownTimer();
-
-    // Exemplo de desbloqueio da mensagem secreta se clicar no último momento 3 vezes seguidas rápido
-    let secretClickCount = 0;
-    let secretTimeout;
-
-    const lastMoment = document.querySelectorAll('.moment')[3];
-    lastMoment.addEventListener('click', () => {
-      secretClickCount++;
-      clearTimeout(secretTimeout);
-      secretTimeout = setTimeout(() => (secretClickCount = 0), 2000);
-
-      if (secretClickCount >= 3) {
-        document.getElementById('secretMessage').style.display = 'block';
-        secretClickCount = 0;
-      }
-    });
   </script>
+
 </body>
 </html>
